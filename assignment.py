@@ -60,7 +60,7 @@ anaerobic_carbon_sources = _
 # 4. Add the capability to produce 3-Hydroxypropanoate (3HP) to the full genome-scale model of E. coli (iML1515). What is the maximum production rate of 3HP.
 
 # Hints:
-# The GSM iML1515 is included here in the repository (iML1515.xml)
+# The GSM iML1515 is included here in the repository (iML1515.xml.gz); `read_sbml_model` can import compressed models (".gz").
 # There are two heterologous reaction steps that can be added to facilitate the production of 3HP from malonyl-CoA
 # 1. https://www.genome.jp/dbget-bin/www_bget?rn:R00740
 # 2. https://www.genome.jp/dbget-bin/www_bget?rn:R09289
