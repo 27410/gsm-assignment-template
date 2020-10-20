@@ -8,120 +8,106 @@ _ = 123456789  # just a wrong number, please ignore
 # feel free to import additional things from those packages already imported
 # or the Python Standard Library (https://docs.python.org/3/library/)
 # (if it helps) but do not import other 3rd party packages.
-import numpy as np
+
 from cobra.io import read_sbml_model
-from cobra.util import create_stoichiometric_matrix
+from cobra import Reaction, Metabolite
 
 # Read model (central metabolism model of Escherichia coli)
 model = read_sbml_model('e_coli_core.xml')
-# Create stoichiometric matrix
-S = create_stoichiometric_matrix(model)
+
+# General hints:
+# 1. Use the E. coli Core model (`model`) in its default configuration if not stated otherwise.
+# 2. Remember to undo modifications to the model before continuing with the next task
+#    (either make a copy of the model for each task or use the `with model: ...` construct as shown in the exercise).
 
 
-# 1. Binarize S
+# 1. Simulate the model. What is the reaction with the largest flux magnitude?
+# Hints:
+# Solutions/output from cobrapy often provides Pandas data frames or series, so you
+# can take full advantage of the included functionality.
 
-# replace _ with a binary representation of S.
-# S_bin should only contain floating point numbers (either 0. or 1.)
+# Put your intermediate solution steps here if you have any ...
 
-S_bin = _
+# Replace _ with you're final calculation step or a variable that contains the final solution.
+# reaction_with_largest_flux needs to resolve to a reaction ID from the model (of type str)
+reaction_with_largest_flux = _
 
+
+# 2. What are the exchange reactions in the model that can facilitate the uptake of carbon sources?
+# Hints:
+# The elemental composition of metabolites is in included in the model.
+
+# Put your intermediate solution steps here if you have any ...
+
+# Replace _ with you're final calculation step or a variable that contains the final solution.
+# carbon_source_exchanges needs to a list of reaction IDs from the model (each of type str)
+carbon_source_exchanges = _
+
+
+# 3. What are the carbon sources that E. coli can grow on anaerobically?
+# Hints:
+# You can use model.slim_optimize(error_value=0.) to return a zero growth rate
+# for cases were no feasible solution can be found (which is akin to non-growth)
+
+# Put your intermediate solution steps here if you have any ...
+
+# Replace _ with you're final calculation step or a variable that contains the final solution.
+# anaerobic_carbon_sources needs to be a list of reaction IDs from the model (each of type str)
+
+anaerobic_carbon_sources = _
+
+
+# 4. Add the capability to produce 3-Hydroxypropanoate (3HP) to the full genome-scale model of E. coli (iML1515). What is the maximum production rate of 3HP.
+
+# Hints:
+# The GSM iML1515 is included here in the repository (iML1515.xml)
+# There are two heterologous reaction steps that can be added to facilitate the production of 3HP from malonyl-CoA
+# 1. https://www.genome.jp/dbget-bin/www_bget?rn:R00740
+# 2. https://www.genome.jp/dbget-bin/www_bget?rn:R09289
+
+# Put your intermediate solution steps here if you have any ...
+
+
+# Replace _ with you're final calculation step or a variable that contains the final solution.
+# max_3hp_production needs to resolve to a number (of type float)
+
+max_3hp_production = _
+
+
+# 5. What is the maximum production rate of 3HP at 20% growth (also using iML1515)?
+# Hints:
+# The biomass objective already set in the model should be used to determine the maximum growth rate.
+
+# Put your intermediate solution steps here if you have any ...
+    
+# Replace _ with you're final calculation step or a variable that contains the final solution.
+# production_3hp_20perc_growth needs to resolve to a number (of type float)
+production_3hp_20perc_growth = _
+
+
+#### Tests are happening in the end now ...
 ###### Don't touch
-def test_binary_stoichiometry_matrix():
-    assert hashlib.md5(S_bin).digest() == b'\xcd\xd3\x04N\x9e\xaf\x1f\xc5\xcb9\x9f\xaaa\x00\x06['
+
+def test_reaction_with_largest_flux():
+    assert type(reaction_with_largest_flux) is str, "reaction_with_largest_flux needs to be a reaction ID of type str."
+    assert hashlib.md5(reaction_with_largest_flux.encode('utf-8')).digest() == b'd0c\x0b\x93{J&\x98SQ\x9e\xecC\xdb\x8a'
+
+def test_carbon_source_exchanges():
+    assert type(carbon_source_exchanges) is list, "carbon_source_exchanges needs to be a list."
+    assert type(carbon_source_exchanges[0]) is str, "carbon_source_exchanges needs to be a list of strings."
+    assert set(carbon_source_exchanges) == set(['EX_ac_e', 'EX_acald_e', 'EX_akg_e', 'EX_co2_e', 'EX_etoh_e', 'EX_for_e', 'EX_fru_e',
+                                       'EX_fum_e', 'EX_glc__D_e', 'EX_gln__L_e', 'EX_glu__L_e', 'EX_lac__D_e', 'EX_mal__L_e',
+                                       'EX_pyr_e', 'EX_succ_e'])
+
+def test_anaerobic_carbon_sources():
+    assert type(anaerobic_carbon_sources) is list, "carbon_source_exchanges needs to be a list."
+    assert type(anaerobic_carbon_sources[0]) is str, "carbon_source_exchanges needs to be a list of strings."
+    assert set(anaerobic_carbon_sources) == set(['EX_fru_e', 'EX_fum_e', 'EX_glc__D_e', 'EX_gln__L_e', 'EX_glu__L_e', 'EX_lac__D_e',
+                                             'EX_mal__L_e', 'EX_pyr_e', 'EX_succ_e'])
+
+def test_max_3hp_production():
+    assert max_3hp_production == pytest.approx(17.84)
+
+def test_production_3hp_20perc_growth():
+    assert production_3hp_20perc_growth == pytest.approx(14.3735)
 ###### this
-
-
-# 2. Compute reaction adjacency matrix A_v.
-
-A_v = _
-
-###### Don't touch
-def test_reaction_adjacency_matrix():
-    assert hashlib.md5(A_v).digest() == b'"TTS\xba\x07\xfa\x06m{\xa6\xbc^l\\.'
-###### this
-
-
-# 3. Compute compound adjacency matrix A_x.
-
-A_x = _
-
-###### Don't touch
-def test_compound_adjacency_matrix():
-    assert hashlib.md5(A_x).digest() == b'"\x1d_\\\x9a\xc3O\xfe0\x98\xf0\t3\xb8\x0e\x0c'
-###### this
-
-
-# 4. Based on A_x, which metabolite participates in the most reactions?
-
-# Hints: model.metabolites behaves like a list or array so you can
-# get a specific metabolite using an index e.g. model.metabolites[0]
-# will give you the first metabolite
-
-# replace _ with the most connected metabolite in the model;
-# needs to be of type cobra.core.metabolite.Metabolite (you can check with type())
-# e.g. type(model.metabolites[0]) == cobra.core.metabolite.Metabolite
-most_connected_metabolite = _
-
-###### Don't touch
-def test_most_connected_metabolite():
-    assert hashlib.md5(most_connected_metabolite.id.encode('utf-8')).digest() == b"\x90\xf7\xa1\xa0\x1a\x0e\x92'\x02\xd1\xdd.\xb6bu\x0e"
-###### this
-
-
-# 5. Based on A_x, how many reactions does metabolite atp_c participate in?
-
-# Hints: You can retrieve a metabolite from the model using its ID
-# using model.metabolites.get_by_id. For example, you could retrieve
-# water inside the c(ytosol) compartment using model.metabolites.get_by_id('h2o_c')
-# Furthermore, since model.metabolites behaves just like a list or array, it
-# also supports model.metabolites.index(your_metabolite).
-
-# Replace _ with the number of reactions atp_c participates in (needs to be determined programmatically).
-atp_participation = _
-
-###### Don't touch
-def test_atp_participation():
-    assert atp_participation == 13
-###### this
-
-
-# 6. How many metabolites do the reactions ACALD and ALCD2x share. Those IDs refer
-# to Acetaldehyde dehydrogenase (acetylating) and Alcohol dehydrogenase (ethanol)
-# respectively.
-
-# Hints: similar to model.metabolites, model.reactions.get_by_id and
-# model.reactions.index are available to retrieve a specific reaction
-# and find the index of a specific reaction.
-
-
-# Replace _ with number of metabolites ACALD and ALCD2x share (should be a number).
-metabolites_in_common = _
-
-
-###### Don't touch
-def test_ACALD_ALCAD2x_metabolites_in_common():
-    assert metabolites_in_common == 4
-###### this
-
-
-# 7. Find the top 10 most connected metabolites.
-# Hint:
-# 1. You can use `zip` to zip two lists together. zip(['a', 'b', 'c'], [1, 2, 3]) => zip([['a', 1], ...]) 
-# 2. You can use Python's `sorted` function to sort a list or a list of lists. You can provide
-#    a function to `sorted`'s `key=` argument to let `sorted` know on what element to sort.
-#    For example `sorted(zip([['a', 1], ...]), key=lambda item: item[1])` will sort based on the 2nd
-#    element of each sublist (i.e. the numbers, not the letters).
-
-# Replace _ with a list of metabolites (all of type cobra.core.metabolite.Metabolite) that
-# correspond to the top 10 most connected metabolites (in ascending order)
-top10 = _
-
-###### Don't touch
-def test_top10():
-	truth = ['h_c', 'h2o_c', 'h_e', 'atp_c', 'adp_c', 'nad_c', 'nadh_c', 'pi_c', 'pyr_c', 'co2_c']
-	assert [metabolite.id for metabolite in top10] == truth
-###### this
-
-
-
-
