@@ -46,6 +46,7 @@ carbon_source_exchanges = _
 
 # 3. What are the carbon sources that E. coli can grow on anaerobically?
 # Hints:
+# Maximum uptake rate for the carbon source should be lower than 10 mmol gDW-1 h-1
 # You can use model.slim_optimize(error_value=0.) to return a zero growth rate
 # for cases were no feasible solution can be found (which is akin to non-growth)
 
@@ -102,8 +103,7 @@ def test_carbon_source_exchanges():
 def test_anaerobic_carbon_sources():
     assert type(anaerobic_carbon_sources) is list, "carbon_source_exchanges needs to be a list."
     assert type(anaerobic_carbon_sources[0]) is str, "carbon_source_exchanges needs to be a list of strings."
-    assert set(anaerobic_carbon_sources) == set(['EX_fru_e', 'EX_fum_e', 'EX_glc__D_e', 'EX_gln__L_e', 'EX_glu__L_e', 'EX_lac__D_e',
-                                             'EX_mal__L_e', 'EX_pyr_e', 'EX_succ_e'])
+    assert set(anaerobic_carbon_sources) == set(['EX_fru_e', 'EX_glc__D_e'])
 
 def test_max_3hp_production():
     assert max_3hp_production == pytest.approx(17.84)
